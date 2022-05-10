@@ -17,7 +17,7 @@ BACKEND_PORT = 12345
 FRONTEND_PORT = 12345
 SERVER_PORT = 12345
 # file
-HEARTBEAT_INTERVAL = 20  # seconds
+HEARTBEAT_INTERVAL = 30  # seconds
 MAX_CONNECTION = None
 LOG = True
 # end of global variable
