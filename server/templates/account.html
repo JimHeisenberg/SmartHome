@@ -1,0 +1,80 @@
+{% extends "main_base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>
+                Hello {{ UserData["UserName"] }}
+            </h3>
+            <ul>
+                <li class="list-item">
+                    Your UserID: {{ UserData["UserID"] }}
+                </li>
+                <li class="list-item">
+                    You can change your password, input the new password at the box below.
+                </li>
+                <li class="list-item">
+                    <input type="password" class="form-control" id="UserPassword">
+                </li>
+                <li class="list-item">
+                    <input type="password" class="form-control" id="UserPasswordRepeat">
+                </li>
+                <li class="list-item">
+                    <button type="button" class="btn btn-primary" onclick="changePassword()">
+                        change
+                    </button>
+                </li>
+                <li class="list-item">
+                    Other account info: {{ UserData["UserMeta"] }}
+                </li>
+            </ul>
+            <p>
+                Smart Home System @Jim
+            </p>
+            <button type="button" class="btn btn-primary" onclick="logout()">
+                logout
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+
+    function changePassword() {
+        var userPassword = document.getElementById("UserPassword").value
+        var UserPasswordRepeat = document.getElementById("UserPasswordRepeat").value
+        if (userPassword != UserPasswordRepeat) {
+            alert("Password NOT same!!!")
+            return
+        }
+        var dataSent = {
+            "Action": "changePassword",
+            "Token": localStorage.getItem("Token"),
+            "Data": {
+                "UserPassword": userPassword
+            }
+        }
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', "_account", false)
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8")
+        xhr.onloadend = (event) => {
+            if (xhr.status == 200) {
+                var dataReceived = JSON.parse(xhr.responseText)
+                localStorage.setItem("Token", dataReceived["Token"])
+                window.location.href = "/overview?Token=" + localStorage.getItem("Token")
+            } else {
+                alert("failed")
+            }
+        }
+        xhr.send(JSON.stringify(dataSent))
+    }
+
+    function logout() {
+        localStorage.removeItem("Token")
+        window.location.href = "/"
+    }
+
+</script>
+{% endblock %}

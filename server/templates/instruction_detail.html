@@ -1,0 +1,325 @@
+{% extends "main_base.html" %}
+{% block content %}
+
+{% if add %}
+<p>Input Instruction information</p>
+<ul>
+    <li class="list-item">
+        <label>InstructionName: </label>
+        <input class="form-control" id="InstructionName">
+    </li>
+    <li class="list-item">
+        <label>InstructionDescription: </label>
+        <input class="form-control" id="InstructionDescription">
+    </li>
+    <li>
+        Status:
+        <select id="InstructionIsOn">
+            <option style="color: green;">On</option>
+            <option style="color: red;" selected>Off</option>
+        </select>
+    </li>
+    <li class="list-item">
+        {% autoescape false %}
+        {{ showInstructionMeta(None, add=True) }}
+        {% endautoescape %}
+    </li>
+    <li class="list-item">
+        <button type="button" class="btn btn-primary" onclick="addInstruction()">
+            Add
+        </button>
+    </li>
+</ul>
+{% else %}
+<!-- else not add -->
+<div hidden id="GlobalVariables">{"InstructionID":{{instruction["InstructionID"]}}}</div>
+<div class="container-fluid">
+    <div class="row">
+        {% set InstructionID = instruction["InstructionID"] %}
+        <div class="col-md-4">
+            {% if not edit %}
+            <button type="button" class="btn btn-primary btn-block"
+                onclick="redirect('instruction_detail', 'InstructionID={{InstructionID}}&edit=1')">
+                Edit Instruction
+            </button>
+            {% else %}
+            <button type="button" class="btn btn-primary btn-block"
+                onclick="redirect('instruction_detail', 'InstructionID={{InstructionID}}')">
+                Discard Changes
+            </button>
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary btn-block" onclick="deleteInstruction()">
+                Delete Instruction
+            </button>
+        </div>
+        <div class="col-md-4">
+            {% if not edit %}
+            <button type="button" class="btn btn-block btn-secondary">-</button>
+            {% else %}
+            <button type="button" class="btn btn-primary btn-block" onclick="saveChanges()">
+                Save Changes
+            </button>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<p></p>
+<p>Instruction information</p>
+<ul>
+    <li class="list-item">
+        InstructionID: {{instruction["InstructionID"]}}
+    </li>
+    <li class="list-item">
+        {% set PermissionStr = None %}
+        {% if instruction["CanView"] %} {% set PermissionStr = "View" %} {% endif %}
+        {% if instruction["CanControl"] %} {% set PermissionStr = "Control" %} {% endif %}
+        {% if instruction["CanManage"] %} {% set PermissionStr = "Manage (full control)" %} {% endif %}
+        Your Permission: {{PermissionStr}}
+    </li>
+    {% if not edit %}
+    <li>
+        Status: Instruction is
+        {% if instruction["InstructionIsOn"] %}
+        <strong style="color: green;">On(Active)</strong>
+        {% else %}
+        <strong style="color: red;">Off</strong>
+        {% endif %}
+    </li>
+    <li class="list-item">
+        InstructionName: {{instruction["InstructionName"]}}
+    </li>
+    <li class="list-item">
+        InstructionDescription: {{instruction["InstructionDescription"]}}
+    </li>
+    {% else %}
+    <li>
+        Status:
+        <select id="InstructionIsOn">
+            {% if instruction["InstructionIsOn"] %}
+            <option style="color: green;" selected>On</option>
+            <option style="color: red;">Off</option>
+            {% else %}
+            <option style="color: green;">On</option>
+            <option style="color: red;" selected>Off</option>
+            {% endif %}
+        </select>
+    </li>
+    <li class="list-item">
+        InstructionName:
+        <input id="InstructionName" value="{{instruction['InstructionName']}}">
+    </li>
+    <li class="list-item">
+        InstructionDescription:
+        <input id="InstructionDescription" value="{{instruction['InstructionDescription']}}">
+    </li>
+    {% endif %}
+</ul>
+<p class="list-item">
+    {% set instructionMeta = instruction.get("InstructionMeta") %}
+    {% autoescape false %}
+    {{ showInstructionMeta(instructionMeta, edit) }}
+    {% endautoescape %}
+</p>
+
+<p hidden>instruction: {{ instruction }}</p>
+
+{% endif %}
+<!-- endif add -->
+{% endblock %}
+{% block script %}
+<script>
+
+    function parseCondition(ElementCondition) {
+        var Condition = {}
+        type = ElementCondition.children[0].children[0]
+        if (type.tagName != "SELECT") {
+            type = ElementCondition.children[1].children[0]
+        }
+        Condition["type"] = type.value
+        if (Condition["type"] == "if") {
+            Condition["DeviceID"] = Number(ElementCondition.children[1].children[0].value)
+            Condition["DeviceIsOn"] = ElementCondition.children[2].children[0].value == "On"
+        } else if (Condition["type"] == "when") {
+            Condition["timeOperator"] = ElementCondition.children[1].children[0].value
+            Condition["time"] = ElementCondition.children[1].children[1].value
+            Condition["repeat"] = ElementCondition.children[2].children[0].value == "On"
+        } else {//if (Condition["type"] in ("and", "or")) {
+            Condition["conditionA"] = parseCondition(ElementCondition.children[0].children[0])
+            Condition["conditionB"] = parseCondition(ElementCondition.children[2].children[0])
+        }
+        return Condition
+    }
+
+    function parseInstructionMeta() {
+        ElementInstructionMeta = document.getElementById("InstructionMeta")
+        ElementCondition = ElementInstructionMeta.children[1].children[0]
+        Condition = parseCondition(ElementCondition)
+        ElementAction = ElementInstructionMeta.children[3].children[0]
+        Action = {
+            "DeviceID": Number(ElementAction.children[0].children[0].value),
+            "DeviceIsOn": ElementAction.children[1].children[0].value == "On",
+        }
+        instructionMeta = {
+            "condition": Condition,
+            "action": Action,
+        }
+        return instructionMeta
+    }
+
+    function addInstruction() {
+        var instructionName = document.getElementById("InstructionName").value
+        var instructionDescription = document.getElementById("InstructionDescription").value
+        var instructionIsOn = document.getElementById("InstructionIsOn").value == "On"
+        var dataSent = {
+            "Action": "insert",
+            "Token": localStorage.getItem("Token"),
+            "Data": [{
+                "InstructionName": instructionName, "InstructionDescription": instructionDescription,
+                "InstructionIsOn": instructionIsOn, "InstructionMeta": null,
+            }],
+        }
+        dataSent["Data"][0]["InstructionMeta"] = parseInstructionMeta()
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', "_instruction", false)
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8")
+        xhr.onloadend = (event) => {
+            if (xhr.status == 200) {
+                redirect('instruction')
+            } else {
+                alert("failed")
+            }
+        }
+        xhr.send(JSON.stringify(dataSent))
+    }
+
+    function deleteInstruction() {
+        var GlobalVariables = JSON.parse(document.getElementById("GlobalVariables").textContent)
+        var instructionID = Number(GlobalVariables["InstructionID"])
+        var dataSent = {
+            "Action": "delete",
+            "Token": localStorage.getItem("Token"),
+            "Data": [{ "InstructionID": instructionID }],
+        }
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', "_instruction", false)
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8")
+        xhr.onloadend = (event) => {
+            if (xhr.status == 200) {
+                redirect('instruction')
+            } else {
+                alert("failed")
+            }
+        }
+        xhr.send(JSON.stringify(dataSent))
+    }
+
+    function createInputElement(text) {
+        base = document.createElement("li")
+        base.setAttribute("class", "list-group-item")
+        base.appendChild(document.createTextNode(text))
+        base.appendChild(document.createElement("input"))
+        return base
+    }
+
+    function createSelectElement(text, optionsArr) {
+        base = document.createElement("li")
+        base.setAttribute("class", "list-group-item")
+        base.appendChild(document.createTextNode(text))
+        select = document.createElement("select")
+        for (var i = 0; i < optionsArr.length; i++) {
+            optionText = optionsArr[i]
+            option = document.createElement("option")
+            option.appendChild(document.createTextNode(optionText))
+            select.appendChild(option)
+            if (optionText == "if") {
+                // condition
+                select.setAttribute("onchange", "conditionChange(this)")
+            }
+        }
+        base.appendChild(select)
+        return base
+    }
+
+    function conditionChange(element) {
+        list_group = element.parentElement.parentElement
+        var elementSelect
+        var old_list_group = Array.from(list_group.children)
+        for (let i = 0; i < old_list_group.length; i++) {
+            var e = old_list_group[i];
+            if (e.children[0].value == element.value) {
+                elementSelect = e
+            } else {
+                e.remove()
+            }
+        }
+
+        if (element.value == 'if') {
+            DeviceID = createInputElement("DeviceID: ")
+            list_group.appendChild(DeviceID)
+            DeviceIsOn = createSelectElement("Device is: ", ["On", "Off"])
+            list_group.appendChild(DeviceIsOn)
+        } else if (element.value == 'when') {
+            time = createSelectElement("time ", ["=", "<", ">"])
+            timeInput = document.createElement("input")
+            timeInput.setAttribute("type", "datetime-local")
+            time.appendChild(timeInput)
+            list_group.appendChild(time)
+            repeat = createSelectElement("repeat : ", ["On", "Off"])
+            list_group.appendChild(repeat)
+        } else {//if (element.value in ('and', 'or')) {
+            conditionA = document.createElement("ul")
+            conditionA.setAttribute("class", "list-group")
+            conditionA.appendChild(createSelectElement("", ["if", "when", "and", "or"]))
+            conditionA.appendChild(createInputElement("DeviceID: "))
+            conditionA.appendChild(createSelectElement("Device is: ", ["On", "Off"]))
+            out_conditionA = document.createElement("li")
+            out_conditionA.setAttribute("class", "list-group-item")
+            out_conditionA.appendChild(conditionA)
+            list_group.appendChild(out_conditionA)
+            list_group.appendChild(document.createElement("div"))
+            conditionB = document.createElement("ul")
+            conditionB.setAttribute("class", "list-group")
+            conditionB.appendChild(createSelectElement("", ["if", "when", "and", "or"]))
+            conditionB.appendChild(createInputElement("DeviceID: "))
+            conditionB.appendChild(createSelectElement("Device is: ", ["On", "Off"]))
+            out_conditionB = document.createElement("li")
+            out_conditionB.setAttribute("class", "list-group-item")
+            out_conditionB.appendChild(conditionB)
+            list_group.appendChild(out_conditionB)
+            list_group.children[2].replaceWith(elementSelect)
+        }
+    }
+
+    function saveChanges() {
+        var GlobalVariables = JSON.parse(document.getElementById("GlobalVariables").textContent)
+        var instructionID = Number(GlobalVariables["InstructionID"])
+        var instructionName = document.getElementById("InstructionName").value
+        var instructionDescription = document.getElementById("InstructionDescription").value
+        var instructionIsOn = document.getElementById("InstructionIsOn").value == "On"
+        var dataSent = {
+            "Action": "update",
+            "Token": localStorage.getItem("Token"),
+            "Data": [{
+                "InstructionID": instructionID,
+                "InstructionName": instructionName, "InstructionDescription": instructionDescription,
+                "InstructionIsOn": instructionIsOn, "InstructionMeta": null,
+            }],
+        }
+        dataSent["Data"][0]["InstructionMeta"] = parseInstructionMeta()
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', "_instruction", false)
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8")
+        xhr.onloadend = (event) => {
+            if (xhr.status == 200) {
+                redirect('instruction')
+            } else {
+                alert("failed")
+            }
+        }
+        xhr.send(JSON.stringify(dataSent))
+    }
+
+</script>
+{% endblock %}

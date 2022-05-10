@@ -1,0 +1,103 @@
+{% extends "main_base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary btn-block" onclick="redirect('instruction_detail', 'add=1')">
+                Add Instruction
+            </button>
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-block btn-secondary">-</button>
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-block btn-secondary">-</button>
+        </div>
+    </div>
+</div>
+<p></p>
+<div id="card-ins">
+    {% set len_instructions = (instructions | length) %}
+    {% for i in range(len_instructions) %}
+    {% set instruction = instructions[i] %}
+    <div class="card">
+        <div class="card-header">
+            <a class="card-link" data-toggle="collapse" data-parent="#card-ins" href="#card-element-ins-{{i}}">
+                [{{i}}] {{instruction["InstructionName"]}}
+            </a>
+        </div>
+        <div id="card-element-ins-{{i}}" class="collapse show">
+            <div class="card-body">
+                <p>
+                    ID: {{instruction["InstructionID"]}},
+                    Name: {{instruction["InstructionName"]}},
+                </p>
+                <p>Description: {{instruction["InstructionDescription"]}}</p>
+                <p>
+                    Status: Instruction is
+                    {% if instruction["InstructionIsOn"] %}
+                    <strong style="color: green;">On(Active)</strong>
+                    {% else %}
+                    <strong style="color: red;">Off</strong>
+                    {% endif %}
+                </p>
+                <p>
+                    {% set PermissionStr = None %}
+                    {% if instruction["CanView"] %} {% set PermissionStr = "View" %} {% endif %}
+                    {% if instruction["CanControl"] %} {% set PermissionStr = "Control" %} {% endif %}
+                    {% if instruction["CanManage"] %} {% set PermissionStr = "Manage (full control)" %} {% endif %}
+                    Your Permission: {{PermissionStr}}
+                </p>
+                <p>
+                    {% set InstructionID = instruction["InstructionID"] %}
+                    {% if instruction["CanManage"] %}
+                    <button type="button" class="btn btn-primary"
+                        onclick="redirect('instruction_detail', 'InstructionID={{InstructionID}}')">
+                        Manage
+                    </button>
+                    {% elif instruction["CanControl"] %}
+                    <button type="button" class="btn btn-info"
+                        onclick="redirect('instruction_detail', 'InstructionID={{InstructionID}}')">
+                        Detail
+                    </button>
+                    {% elif instruction["CanView"] %}
+                    <button type="button" class="btn btn-secondary"
+                        onclick="redirect('instruction_detail', 'InstructionID={{InstructionID}}')">
+                        View
+                    </button>
+                    {% endif %}
+                </p>
+                {% set instructionMeta = instruction.get("InstructionMeta") %}
+                {% autoescape false %}
+                {{ showInstructionMeta(instructionMeta) }}
+                {% endautoescape %}
+                <p>Other Information: {{instructionMeta.get("info")}}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<p></p>
+<nav>
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" href="#">First</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">Previous</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">1</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">Last</a>
+        </li>
+    </ul>
+</nav>
+
+<p hidden>instructions: {{ instructions }}</p>
+
+{% endblock %}

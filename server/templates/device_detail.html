@@ -1,0 +1,308 @@
+{% extends "main_base.html" %}
+{% block content %}
+
+{% if add %}
+<p>Input Device information</p>
+<ul>
+    <li class="list-item">
+        <label>DeviceID: </label>
+        <input class="form-control" id="DeviceID">
+    </li>
+    <li class="list-item">
+        <label>DevicePassword: </label>
+        <input class="form-control" id="DevicePassword">
+    </li>
+    <li class="list-item">
+        <button type="button" class="btn btn-primary" onclick="addDevice()">
+            Add
+        </button>
+    </li>
+</ul>
+{% else %}
+<!-- else not add -->
+<div hidden id="GlobalVariables">
+    {"DeviceID":{{device["DeviceID"]}},"PermissionID":{{device["PermissionID"]}},"len_permissions":{{permissions|length}}}
+</div>
+<div class="container-fluid">
+    <div class="row">
+        {% set DeviceID = device["DeviceID"] %}
+        <div class="col-md-4">
+            {% if not edit %}
+            <button type="button" class="btn btn-primary btn-block"
+                onclick="redirect('device_detail', 'DeviceID={{DeviceID}}&edit=1')">
+                Edit Device
+            </button>
+            {% else %}
+            <button type="button" class="btn btn-primary btn-block"
+                onclick="redirect('device_detail', 'DeviceID={{DeviceID}}')">
+                Discard Changes
+            </button>
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary btn-block" onclick="deleteDevice()">
+                Delete Device
+            </button>
+        </div>
+        <div class="col-md-4">
+            {% if not edit %}
+            <button type="button" class="btn btn-block btn-secondary">-</button>
+            {% else %}
+            <button type="button" class="btn btn-primary btn-block" onclick="saveChanges()">
+                Save Changes
+            </button>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<p></p>
+<p>Device information</p>
+<ul>
+    <li class="list-item">
+        DeviceID: {{device["DeviceID"]}}
+    </li>
+    <li class="list-item">
+        DeviceType: {{device["DeviceType"]}}
+    </li>
+    <li class="list-item">
+        {% set PermissionStr = None %}
+        {% if device["CanView"] %} {% set PermissionStr = "View" %} {% endif %}
+        {% if device["CanControl"] %} {% set PermissionStr = "Control" %} {% endif %}
+        {% if device["CanManage"] %} {% set PermissionStr = "Manage (full control)" %} {% endif %}
+        Your Permission: {{PermissionStr}}
+    </li>
+    {% if not edit %}
+    <li class="list-item">
+        Status: Device is
+        {% if device["DeviceIsOnline"] %}
+        <strong style="color: green;">Online</strong> and turned
+        {% if device["DeviceIsOn"] %}
+        <strong style="color: green;">On</strong>
+        {% else %}
+        <strong style="color: red;">Off</strong>
+        {% endif %}
+        {% else %}
+        <strong style="color: red;">Offline</strong> and used to be
+        {% if device["DeviceIsOn"] %}
+        <strong style="color: green;">On</strong>
+        {% else %}
+        <strong style="color: red;">Off</strong>
+        {% endif %}
+        {% endif %}
+    </li>
+    <li class="list-item">
+        DeviceName: {{device["DeviceName"]}}
+    </li>
+    <li class="list-item">
+        DeviceDescription: {{device["DeviceDescription"]}}
+    </li>
+    {% else %}
+    <!-- else edit -->
+    <li class="list-item">
+        Status:
+        <select id="DeviceIsOn">
+            {% if device["DeviceIsOn"] %}
+            <option style="color: green;" selected>On</option>
+            <option style="color: red;">Off</option>
+            {% else %}
+            <option style="color: green;">On</option>
+            <option style="color: red;" selected>Off</option>
+            {% endif %}
+        </select>
+    </li>
+    <li class="list-item">
+        DeviceName:
+        <input id="DeviceName" value="{{device['DeviceName']}}">
+    </li>
+    <li class="list-item">
+        DeviceDescription:
+        <input id="DeviceDescription" value="{{device['DeviceDescription']}}">
+    </li>
+    {% endif %}
+</ul>
+
+<p>Device permission information</p>
+<ul>
+    {% set len_permissions = (permissions | length) %}
+    {% for i in range(len_permissions) %}
+    {% set permission = permissions[i] %}
+    {% set PermissionStr = None %}
+    {% if permission["CanView"] %} {% set PermissionStr = "View" %} {% endif %}
+    {% if permission["CanControl"] %} {% set PermissionStr = "Control" %} {% endif %}
+    {% if permission["CanManage"] %} {% set PermissionStr = "Manage (full control)" %} {% endif %}
+    {% if not edit %}
+    <li class="list-item">
+        {{permission["UserName"]}}(ID:{{permission["UserID"]}}): {{PermissionStr}}
+    </li>
+    {% else %}
+    <!-- else edit -->
+    <li class="list-item">
+        <div hidden id="listPID-{{i}}">{"PermissionID":{{permission["PermissionID"]}}}</div>
+        {{permission["UserName"]}}(ID:{{permission["UserID"]}}):
+        <select id="listPVAL-{{i}}">
+            {% if permission["CanManage"] %}
+            <option value="CanManage" selected>Can Manage</option>
+            <option value="CanControl">Can Control</option>
+            <option value="CanView">Can View</option>
+            <option value="None">NO Permission</option>
+            {% elif permission["CanControl"] %}
+            <option value="CanManage">Can Manage</option>
+            <option value="CanControl" selected>Can Control</option>
+            <option value="CanView">Can View</option>
+            <option value="None">NO Permission</option>
+            {% elif permission["CanView"] %}
+            <option value="CanManage">Can Manage</option>
+            <option value="CanControl">Can Control</option>
+            <option value="CanView" selected>Can View</option>
+            <option value="None">NO Permission</option>
+            {% else %}
+            <option value="CanManage">Can Manage</option>
+            <option value="CanControl">Can Control</option>
+            <option value="CanView">Can View</option>
+            <option value="None" selected>NO Permission</option>
+            {% endif %}
+        </select>
+    </li>
+    {% endif %}
+    {% endfor %}
+</ul>
+{% if not edit %}
+<p>Device instruction information</p>
+<ul>
+    {% for instruction in instructions %}
+    <li>
+        ID: {{instruction["InstructionID"]}},
+        Name: {{instruction["InstructionName"]}},
+    </li>
+    <li>Description: {{instruction["InstructionDescription"]}}</li>
+    <li class="list-item">
+        {% set instructionMeta = instruction.get("InstructionMeta") %}
+        {% autoescape false %}
+        {{ showInstructionMeta(instructionMeta) }}
+        {% endautoescape %}
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<p hidden>device: {{ device }}</p>
+<p hidden>permissions: {{ permissions }}</p>
+<p hidden>instructions: {{ instructions }}</p>
+
+{% endif %}
+<!-- endif add -->
+{% endblock %}
+
+{% block script %}
+<script>
+
+    function addDevice() {
+        var deviceID = Number(document.getElementById("DeviceID").value)
+        var devicePassword = document.getElementById("DevicePassword").value
+        var dataSent = {
+            "Action": "insert",
+            "Token": localStorage.getItem("Token"),
+            "DeviceID": deviceID,
+            "Data": [{ "CanView": true, "CanControl": true, "CanManage": true, "DeviceID": deviceID, "DevicePassword": devicePassword, }],
+        }
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', "_permission", false)
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8")
+        xhr.onloadend = (event) => {
+            if (xhr.status == 200) {
+                redirect('device')
+            } else {
+                alert("failed")
+            }
+        }
+        xhr.send(JSON.stringify(dataSent))
+    }
+
+    function deleteDevice() {
+        var GlobalVariables = JSON.parse(document.getElementById("GlobalVariables").textContent)
+        var deviceID = Number(GlobalVariables["DeviceID"])
+        var permissionID = Number(GlobalVariables["PermissionID"])
+        var dataSent = {
+            "Action": "delete",
+            "Token": localStorage.getItem("Token"),
+            "DeviceID": deviceID,
+            "Data": [{ "PermissionID": permissionID }],
+        }
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', "_permission", false)
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8")
+        xhr.onloadend = (event) => {
+            if (xhr.status == 200) {
+                redirect('device')
+            } else {
+                alert("failed")
+            }
+        }
+        xhr.send(JSON.stringify(dataSent))
+    }
+
+    function saveChanges() {
+        var GlobalVariables = JSON.parse(document.getElementById("GlobalVariables").textContent)
+        var deviceID = Number(GlobalVariables["DeviceID"])
+        var deviceName = document.getElementById("DeviceName").value
+        var deviceDescription = document.getElementById("DeviceDescription").value
+        var deviceIsOn = (document.getElementById("DeviceIsOn").value == "On")
+        // device
+        var dataSent = {
+            "Action": "update",
+            "Token": localStorage.getItem("Token"),
+            "Data": [{
+                "DeviceID": deviceID,
+                "DeviceName": deviceName,
+                "DeviceDescription": deviceDescription,
+                "DeviceIsOn": deviceIsOn,
+            }],
+        }
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', "_device", false)
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8")
+        xhr.onloadend = (event) => {
+            if (xhr.status == 200) {
+                // redirect('device')
+            } else {
+                alert("change device failed")
+            }
+        }
+        xhr.send(JSON.stringify(dataSent))
+        // permission
+        var dataSent = {
+            "Action": "update",
+            "Token": localStorage.getItem("Token"),
+            "DeviceID": deviceID,
+            "Data": [],
+        }
+        var len_permissions = Number(GlobalVariables["len_permissions"])
+        for (let i = 0; i < len_permissions; i++) {
+            var permissionIDInfo = document.getElementById("listPID-" + i).textContent
+            var permissionID = Number(JSON.parse(permissionIDInfo)["PermissionID"])
+            var permissionType = document.getElementById("listPVAL-" + i).value
+            var permissionStr = permissionType
+            var permissionVal = true
+            if (permissionType == "None") {
+                permissionStr = "CanView"
+                permissionVal = false
+            }
+            permission = { "PermissionID": permissionID, }
+            permission[permissionStr] = permissionVal
+            dataSent["Data"].push(permission)
+        }
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', "_permission", false)
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8")
+        xhr.onloadend = (event) => {
+            if (xhr.status == 200) {
+                redirect('device')
+            } else {
+                alert("change permission failed")
+            }
+        }
+        xhr.send(JSON.stringify(dataSent))
+    }
+
+</script>
+{% endblock %}

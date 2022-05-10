@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Smart Home System</title>
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="static/favicon.ico">
+</head>
+
+<body>
+    {% block body %}
+    {% endblock %}
+</body>
+
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script>
+
+    function redirect(base, parameter = null) {
+        if (parameter == null) {
+            parameter = ""
+        } else {
+            parameter = "&" + parameter
+        }
+        window.location.href = "/" + base + "?Token=" + localStorage.getItem("Token") + parameter
+    }
+
+</script>
+{% block main_script %}
+{% endblock %}
+{% block script %}
+{% endblock %}
+
+</html>

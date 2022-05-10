@@ -1,0 +1,7 @@
+.vscode
+*/__pycache__
+*/*/__pycache__
+*/test/
+/server/static/css
+/server/static/fonts
+/server/static/js

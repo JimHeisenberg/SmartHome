@@ -1,0 +1,110 @@
+{% extends "main_base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary btn-block" onclick="redirect('device_detail', 'add=1')">
+                Add Device
+            </button>
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-block btn-secondary">-</button>
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-block btn-secondary">-</button>
+        </div>
+    </div>
+</div>
+<p></p>
+<div id="card-dev">
+    {% set len_devices = (devices | length) %}
+    {% for i in range(len_devices) %}
+    {% set device = devices[i] %}
+    <div class="card">
+        <div class="card-header">
+            <a class="card-link" data-toggle="collapse" data-parent="#card-dev" href="#card-element-dev-{{i}}">
+                [{{i}}] {{device["DeviceType"]}} {{device["DeviceName"]}}
+            </a>
+        </div>
+        <div id="card-element-dev-{{i}}" class="collapse show">
+            <div class="card-body">
+                <p>
+                    ID: {{device["DeviceID"]}},
+                    Name: {{device["DeviceName"]}},
+                    Type: {{device["DeviceType"]}},
+                </p>
+                <p>Description: {{device["DeviceDescription"]}}</p>
+                <p>
+                    Status: Device is
+                    {% if device["DeviceIsOnline"] %}
+                    <strong style="color: green;">Online</strong> and turned
+                    {% if device["DeviceIsOn"] %}
+                    <strong style="color: green;">On</strong>
+                    {% else %}
+                    <strong style="color: red;">Off</strong>
+                    {% endif %}
+                    {% else %}
+                    <strong style="color: red;">Offline</strong> and used to be
+                    {% if device["DeviceIsOn"] %}
+                    <strong style="color: green;">On</strong>
+                    {% else %}
+                    <strong style="color: red;">Off</strong>
+                    {% endif %}
+                    {% endif %}
+                </p>
+                <p>
+                    {% set PermissionStr = None %}
+                    {% if device["CanView"] %} {% set PermissionStr = "View" %} {% endif %}
+                    {% if device["CanControl"] %} {% set PermissionStr = "Control" %} {% endif %}
+                    {% if device["CanManage"] %} {% set PermissionStr = "Manage (full control)" %} {% endif %}
+                    Your Permission: {{PermissionStr}}
+                </p>
+                <p>
+                    {% set DeviceID = device["DeviceID"] %}
+                    {% if device["CanManage"] %}
+                    <button type="button" class="btn btn-primary"
+                        onclick="redirect('device_detail', 'DeviceID={{DeviceID}}')">
+                        Manage
+                    </button>
+                    {% elif device["CanControl"] %}
+                    <button type="button" class="btn btn-info"
+                        onclick="redirect('device_detail', 'DeviceID={{DeviceID}}')">
+                        Detail
+                    </button>
+                    {% elif device["CanView"] %}
+                    <button type="button" class="btn btn-secondary"
+                        onclick="redirect('device_detail', 'DeviceID={{DeviceID}}')">
+                        View
+                    </button>
+                    {% endif %}
+                </p>
+                <p>Other Information: {{device["DeviceMeta"]}}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<p></p>
+<nav>
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" href="#">First</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">Previous</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">1</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">Last</a>
+        </li>
+    </ul>
+</nav>
+
+<p hidden>devices: {{ devices }}</p>
+
+{% endblock %}

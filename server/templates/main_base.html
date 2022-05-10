@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1 class="text-center">
+                    Smart Home System
+                </h1>
+                <p class="text-center">
+                    welcome
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="btn-group btn-group-vertical btn-group-lg btn-block" role="group">
+                <button type="button" class="btn btn-success" onclick="redirect('overview')">
+                    overview
+                </button>
+                <button type="button" class="btn btn-primary" onclick="redirect('device')">
+                    device
+                </button>
+                <button type="button" class="btn btn-info" onclick="redirect('instruction')">
+                    instruction
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="redirect('account')">
+                    account
+                </button>
+                <button type="button" class="btn btn-outline-dark" onclick="refresh()">
+                    refresh
+                </button>
+            </div>
+        </div>
+        <div class="col-md-10">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block main_script %}
+<script>
+    function refresh() {
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', "_trigger", false)
+        xhr.send()
+        window.location.reload()
+    }
+</script>
+{% endblock %}

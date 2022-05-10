@@ -1,0 +1,110 @@
+{% extends "main_base.html" %}
+{% block content %}
+<div class="alert alert-success alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+    <h4>Notice:</h4>
+    <strong>Hello!</strong> you can see the overview of your devices and instructions below!
+    <a href="#" class="alert-link"></a>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div id="card-dev">
+                {% set len_devices = (devices | length) %}
+                {% for i in range(len_devices) %}
+                {% set device = devices[i] %}
+                <div class="card">
+                    <div class="card-header">
+                        <a class="card-link" data-toggle="collapse" data-parent="#card-dev"
+                            href="#card-element-dev-{{i}}">
+                            [{{i}}] {{device["DeviceType"]}} {{device["DeviceName"]}}
+                        </a>
+                    </div>
+                    <div id="card-element-dev-{{i}}" class="collapse show">
+                        <div class="card-body">
+                            <p>
+                                ID: {{device["DeviceID"]}},
+                                Name: {{device["DeviceName"]}},
+                                Type: {{device["DeviceType"]}},
+                            </p>
+                            <p>Description: {{device["DeviceDescription"]}}</p>
+                            <p>
+                                Status: Device is
+                                {% if device["DeviceIsOnline"] %}
+                                <strong style="color: green;">Online</strong> and turned
+                                {% if device["DeviceIsOn"] %}
+                                <strong style="color: green;">On</strong>
+                                {% else %}
+                                <strong style="color: red;">Off</strong>
+                                {% endif %}
+                                {% else %}
+                                <strong style="color: red;">Offline</strong> and used to be
+                                {% if device["DeviceIsOn"] %}
+                                <strong style="color: green;">On</strong>
+                                {% else %}
+                                <strong style="color: red;">Off</strong>
+                                {% endif %}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="card-ins">
+                {% set len_instructions = (instructions | length) %}
+                {% for i in range(len_instructions) %}
+                {% set instruction = instructions[i] %}
+                <div class="card">
+                    <div class="card-header">
+                        <a class="card-link" data-toggle="collapse" data-parent="#card-ins"
+                            href="#card-element-ins-{{i}}">
+                            [{{i}}] {{instruction["InstructionName"]}}
+                        </a>
+                    </div>
+                    <div id="card-element-ins-{{i}}" class="collapse show">
+                        <div class="card-body">
+                            <p>
+                                ID: {{instruction["InstructionID"]}},
+                                Name: {{instruction["InstructionName"]}},
+                            </p>
+                            <p>Description: {{instruction["InstructionDescription"]}}</p>
+                            <p>
+                                Status: Instruction is
+                                {% if instruction["InstructionIsOn"] %}
+                                <strong style="color: green;">On(Active)</strong>
+                                {% else %}
+                                <strong style="color: red;">Off</strong>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<p></p>
+<nav hidden>
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" href="#">First</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">Previous</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">1</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">Last</a>
+        </li>
+    </ul>
+</nav>
+{% endblock %}
