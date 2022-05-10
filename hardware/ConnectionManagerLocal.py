@@ -186,6 +186,8 @@ class DeviceHandle:
             self.socket.settimeout(HEARTBEAT_INTERVAL)
             self.socket.connect(self.Address)
             self._initDeviceInfo()
+            self.heartbeatSentAfterInterval = False
+            self.lastReceiveTime = time.time()
             # self.deviceManager.removeDeviceHandle(deviceID=None, deviceHandle=self)
         except Exception as e:
             print(e)
