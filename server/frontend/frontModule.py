@@ -12,7 +12,9 @@ from itsdangerous import BadData, TimedJSONWebSignatureSerializer as Serializer
 
 
 # global variable
-BACKEND_URL = "http://127.0.0.1:12345"
+BACKEND_IP = "10.0.16.17"
+BACKEND_PORT = 54321
+BACKEND_URL = "http://"+BACKEND_IP+":12345"
 # end of global variable
 
 

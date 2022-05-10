@@ -3,9 +3,13 @@ from alarm import Alarm
 from assistant import Assistant, VoiceRecognizer
 from light import Light
 
+
+# global variable
 BACKEND_IP = "124.223.65.144"
 BACKEND_PORT = 54321
 BACKEND_URL = "http://"+BACKEND_IP+":12345"
+# end of global variable
+
 
 if __name__ == "__main__":
     cm = ConnectionManagerLocal(BACKEND_URL)
