@@ -5,15 +5,15 @@
 <p>输入指令信息</p>
 <ul>
     <li class="list-item">
-        <label>InstructionName: </label>
+        <label>指令名称: </label>
         <input class="form-control" id="InstructionName">
     </li>
     <li class="list-item">
-        <label>InstructionDescription: </label>
+        <label>指令描述: </label>
         <input class="form-control" id="InstructionDescription">
     </li>
     <li>
-        Status:
+        状态:
         <select id="InstructionIsOn">
             <option style="color: green;">On</option>
             <option style="color: red;" selected>Off</option>
@@ -26,7 +26,7 @@
     </li>
     <li class="list-item">
         <button type="button" class="btn btn-primary" onclick="addInstruction()">
-            Add
+            添加
         </button>
     </li>
 </ul>
@@ -76,11 +76,11 @@
         {% if instruction["CanView"] %} {% set PermissionStr = "View" %} {% endif %}
         {% if instruction["CanControl"] %} {% set PermissionStr = "Control" %} {% endif %}
         {% if instruction["CanManage"] %} {% set PermissionStr = "Manage (full control)" %} {% endif %}
-        Your Permission: {{PermissionStr}}
+        您的权限: {{PermissionStr}}
     </li>
     {% if not edit %}
     <li>
-        Status: Instruction is
+        状态: Instruction is
         {% if instruction["InstructionIsOn"] %}
         <strong style="color: green;">On(Active)</strong>
         {% else %}
@@ -88,14 +88,14 @@
         {% endif %}
     </li>
     <li class="list-item">
-        InstructionName: {{instruction["InstructionName"]}}
+        指令名称: {{instruction["InstructionName"]}}
     </li>
     <li class="list-item">
-        InstructionDescription: {{instruction["InstructionDescription"]}}
+        指令描述: {{instruction["InstructionDescription"]}}
     </li>
     {% else %}
     <li>
-        Status:
+        状态:
         <select id="InstructionIsOn">
             {% if instruction["InstructionIsOn"] %}
             <option style="color: green;" selected>On</option>
@@ -107,11 +107,11 @@
         </select>
     </li>
     <li class="list-item">
-        InstructionName:
+        指令名称:
         <input id="InstructionName" value="{{instruction['InstructionName']}}">
     </li>
     <li class="list-item">
-        InstructionDescription:
+        指令描述:
         <input id="InstructionDescription" value="{{instruction['InstructionDescription']}}">
     </li>
     {% endif %}

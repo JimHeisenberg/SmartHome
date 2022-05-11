@@ -2,7 +2,7 @@
 {% block content %}
 
 {% if add %}
-<p>Input Device information</p>
+<p>输入设备信息</p>
 <ul>
     <li class="list-item">
         <label>设备ID: </label>
@@ -62,18 +62,18 @@
         DeviceID: {{device["DeviceID"]}}
     </li>
     <li class="list-item">
-        DeviceType: {{device["DeviceType"]}}
+        设备种类: {{device["DeviceType"]}}
     </li>
     <li class="list-item">
         {% set PermissionStr = None %}
         {% if device["CanView"] %} {% set PermissionStr = "View" %} {% endif %}
         {% if device["CanControl"] %} {% set PermissionStr = "Control" %} {% endif %}
         {% if device["CanManage"] %} {% set PermissionStr = "Manage (full control)" %} {% endif %}
-        Your Permission: {{PermissionStr}}
+        您的权限: {{PermissionStr}}
     </li>
     {% if not edit %}
     <li class="list-item">
-        Status: Device is
+        状态: Device is
         {% if device["DeviceIsOnline"] %}
         <strong style="color: green;">Online</strong> and turned
         {% if device["DeviceIsOn"] %}
@@ -91,15 +91,15 @@
         {% endif %}
     </li>
     <li class="list-item">
-        DeviceName: {{device["DeviceName"]}}
+        设备名称: {{device["DeviceName"]}}
     </li>
     <li class="list-item">
-        DeviceDescription: {{device["DeviceDescription"]}}
+        设备描述: {{device["DeviceDescription"]}}
     </li>
     {% else %}
     <!-- else edit -->
     <li class="list-item">
-        Status:
+        状态:
         <select id="DeviceIsOn">
             {% if device["DeviceIsOn"] %}
             <option style="color: green;" selected>On</option>
@@ -111,11 +111,11 @@
         </select>
     </li>
     <li class="list-item">
-        DeviceName:
+        设备名称:
         <input id="DeviceName" value="{{device['DeviceName']}}">
     </li>
     <li class="list-item">
-        DeviceDescription:
+        设备描述:
         <input id="DeviceDescription" value="{{device['DeviceDescription']}}">
     </li>
     {% endif %}
@@ -170,17 +170,17 @@
 <p>设备指令信息</p>
 <ul>
     {% for instruction in instructions %}
-    <li>
-        ID: {{instruction["InstructionID"]}},
-        Name: {{instruction["InstructionName"]}},
-    </li>
-    <li>Description: {{instruction["InstructionDescription"]}}</li>
     <li class="list-item">
+        ID: {{instruction["InstructionID"]}},
+        名称: {{instruction["InstructionName"]}},
+        描述: {{instruction["InstructionDescription"]}}
+    </li>
+    <div>
         {% set instructionMeta = instruction.get("InstructionMeta") %}
         {% autoescape false %}
         {{ showInstructionMeta(instructionMeta) }}
         {% endautoescape %}
-    </li>
+    </div>
     {% endfor %}
 </ul>
 {% endif %}

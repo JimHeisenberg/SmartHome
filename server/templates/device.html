@@ -30,12 +30,12 @@
             <div class="card-body">
                 <p>
                     ID: {{device["DeviceID"]}},
-                    Name: {{device["DeviceName"]}},
-                    Type: {{device["DeviceType"]}},
+                    名称: {{device["DeviceName"]}},
+                    种类: {{device["DeviceType"]}},
                 </p>
-                <p>Description: {{device["DeviceDescription"]}}</p>
+                <p>描述: {{device["DeviceDescription"]}}</p>
                 <p>
-                    Status: Device is
+                    状态: Device is
                     {% if device["DeviceIsOnline"] %}
                     <strong style="color: green;">Online</strong> and turned
                     {% if device["DeviceIsOn"] %}
@@ -57,7 +57,7 @@
                     {% if device["CanView"] %} {% set PermissionStr = "View" %} {% endif %}
                     {% if device["CanControl"] %} {% set PermissionStr = "Control" %} {% endif %}
                     {% if device["CanManage"] %} {% set PermissionStr = "Manage (full control)" %} {% endif %}
-                    Your Permission: {{PermissionStr}}
+                    您的权限: {{PermissionStr}}
                 </p>
                 <p>
                     {% set DeviceID = device["DeviceID"] %}
@@ -78,7 +78,7 @@
                     </button>
                     {% endif %}
                 </p>
-                <p>Other Information: {{device["DeviceMeta"]}}</p>
+                <p>其他信息: {{device["DeviceMeta"]}}</p>
             </div>
         </div>
     </div>

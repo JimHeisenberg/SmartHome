@@ -30,11 +30,11 @@
             <div class="card-body">
                 <p>
                     ID: {{instruction["InstructionID"]}},
-                    Name: {{instruction["InstructionName"]}},
+                    名称: {{instruction["InstructionName"]}},
                 </p>
-                <p>Description: {{instruction["InstructionDescription"]}}</p>
+                <p>描述: {{instruction["InstructionDescription"]}}</p>
                 <p>
-                    Status: Instruction is
+                    状态: Instruction is
                     {% if instruction["InstructionIsOn"] %}
                     <strong style="color: green;">On(Active)</strong>
                     {% else %}
@@ -46,7 +46,7 @@
                     {% if instruction["CanView"] %} {% set PermissionStr = "View" %} {% endif %}
                     {% if instruction["CanControl"] %} {% set PermissionStr = "Control" %} {% endif %}
                     {% if instruction["CanManage"] %} {% set PermissionStr = "Manage (full control)" %} {% endif %}
-                    Your Permission: {{PermissionStr}}
+                    您的权限: {{PermissionStr}}
                 </p>
                 <p>
                     {% set InstructionID = instruction["InstructionID"] %}
@@ -71,7 +71,7 @@
                 {% autoescape false %}
                 {{ showInstructionMeta(instructionMeta) }}
                 {% endautoescape %}
-                <p>Other Information: {{instructionMeta.get("info")}}</p>
+                <p>其他信息: {{instructionMeta.get("info")}}</p>
             </div>
         </div>
     </div>

@@ -24,12 +24,12 @@
                         <div class="card-body">
                             <p>
                                 ID: {{device["DeviceID"]}},
-                                Name: {{device["DeviceName"]}},
-                                Type: {{device["DeviceType"]}},
+                                名称: {{device["DeviceName"]}},
+                                种类: {{device["DeviceType"]}},
                             </p>
-                            <p>Description: {{device["DeviceDescription"]}}</p>
+                            <p>描述: {{device["DeviceDescription"]}}</p>
                             <p>
-                                Status: Device is
+                                状态: Device is
                                 {% if device["DeviceIsOnline"] %}
                                 <strong style="color: green;">Online</strong> and turned
                                 {% if device["DeviceIsOn"] %}
@@ -68,11 +68,11 @@
                         <div class="card-body">
                             <p>
                                 ID: {{instruction["InstructionID"]}},
-                                Name: {{instruction["InstructionName"]}},
+                                名称: {{instruction["InstructionName"]}},
                             </p>
-                            <p>Description: {{instruction["InstructionDescription"]}}</p>
+                            <p>描述: {{instruction["InstructionDescription"]}}</p>
                             <p>
-                                Status: Instruction is
+                                状态: Instruction is
                                 {% if instruction["InstructionIsOn"] %}
                                 <strong style="color: green;">On(Active)</strong>
                                 {% else %}
