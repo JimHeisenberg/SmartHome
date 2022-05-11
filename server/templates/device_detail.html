@@ -5,16 +5,16 @@
 <p>Input Device information</p>
 <ul>
     <li class="list-item">
-        <label>DeviceID: </label>
+        <label>设备ID: </label>
         <input class="form-control" id="DeviceID">
     </li>
     <li class="list-item">
-        <label>DevicePassword: </label>
+        <label>设备密码: </label>
         <input class="form-control" id="DevicePassword">
     </li>
     <li class="list-item">
         <button type="button" class="btn btn-primary" onclick="addDevice()">
-            Add
+            添加
         </button>
     </li>
 </ul>
@@ -30,18 +30,18 @@
             {% if not edit %}
             <button type="button" class="btn btn-primary btn-block"
                 onclick="redirect('device_detail', 'DeviceID={{DeviceID}}&edit=1')">
-                Edit Device
+                修改
             </button>
             {% else %}
             <button type="button" class="btn btn-primary btn-block"
                 onclick="redirect('device_detail', 'DeviceID={{DeviceID}}')">
-                Discard Changes
+                放弃
             </button>
             {% endif %}
         </div>
         <div class="col-md-4">
             <button type="button" class="btn btn-primary btn-block" onclick="deleteDevice()">
-                Delete Device
+                删除
             </button>
         </div>
         <div class="col-md-4">
@@ -49,14 +49,14 @@
             <button type="button" class="btn btn-block btn-secondary">-</button>
             {% else %}
             <button type="button" class="btn btn-primary btn-block" onclick="saveChanges()">
-                Save Changes
+                保存
             </button>
             {% endif %}
         </div>
     </div>
 </div>
 <p></p>
-<p>Device information</p>
+<p>设备信息</p>
 <ul>
     <li class="list-item">
         DeviceID: {{device["DeviceID"]}}
@@ -121,7 +121,7 @@
     {% endif %}
 </ul>
 
-<p>Device permission information</p>
+<p>设备权限信息</p>
 <ul>
     {% set len_permissions = (permissions | length) %}
     {% for i in range(len_permissions) %}
@@ -167,7 +167,7 @@
     {% endfor %}
 </ul>
 {% if not edit %}
-<p>Device instruction information</p>
+<p>设备指令信息</p>
 <ul>
     {% for instruction in instructions %}
     <li>

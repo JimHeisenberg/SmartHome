@@ -8,10 +8,10 @@
             </h3>
             <ul>
                 <li class="list-item">
-                    Your UserID: {{ UserData["UserID"] }}
+                    您的用户ID: {{ UserData["UserID"] }}
                 </li>
                 <li class="list-item">
-                    You can change your password, input the new password at the box below.
+                    您可以在此修改密码, 在下方输入新密码.
                 </li>
                 <li class="list-item">
                     <input type="password" class="form-control" id="UserPassword">
@@ -21,18 +21,18 @@
                 </li>
                 <li class="list-item">
                     <button type="button" class="btn btn-primary" onclick="changePassword()">
-                        change
+                        修改
                     </button>
                 </li>
                 <li class="list-item">
-                    Other account info: {{ UserData["UserMeta"] }}
+                    账号的其他信息: {{ UserData["UserMeta"] }}
                 </li>
             </ul>
-            <p>
-                Smart Home System @Jim
+            <p hidden>
+                智能家居系统 @Jim
             </p>
             <button type="button" class="btn btn-primary" onclick="logout()">
-                logout
+                登出
             </button>
         </div>
     </div>

@@ -2,7 +2,7 @@
 {% block content %}
 
 {% if add %}
-<p>Input Instruction information</p>
+<p>输入指令信息</p>
 <ul>
     <li class="list-item">
         <label>InstructionName: </label>
@@ -40,18 +40,18 @@
             {% if not edit %}
             <button type="button" class="btn btn-primary btn-block"
                 onclick="redirect('instruction_detail', 'InstructionID={{InstructionID}}&edit=1')">
-                Edit Instruction
+                修改
             </button>
             {% else %}
             <button type="button" class="btn btn-primary btn-block"
                 onclick="redirect('instruction_detail', 'InstructionID={{InstructionID}}')">
-                Discard Changes
+                放弃
             </button>
             {% endif %}
         </div>
         <div class="col-md-4">
             <button type="button" class="btn btn-primary btn-block" onclick="deleteInstruction()">
-                Delete Instruction
+                删除
             </button>
         </div>
         <div class="col-md-4">
@@ -59,14 +59,14 @@
             <button type="button" class="btn btn-block btn-secondary">-</button>
             {% else %}
             <button type="button" class="btn btn-primary btn-block" onclick="saveChanges()">
-                Save Changes
+                保存
             </button>
             {% endif %}
         </div>
     </div>
 </div>
 <p></p>
-<p>Instruction information</p>
+<p>指令信息</p>
 <ul>
     <li class="list-item">
         InstructionID: {{instruction["InstructionID"]}}
