@@ -54,9 +54,9 @@
                 </p>
                 <p>
                     {% set PermissionStr = None %}
-                    {% if device["CanView"] %} {% set PermissionStr = "View" %} {% endif %}
-                    {% if device["CanControl"] %} {% set PermissionStr = "Control" %} {% endif %}
-                    {% if device["CanManage"] %} {% set PermissionStr = "Manage (full control)" %} {% endif %}
+                    {% if device["CanView"] %} {% set PermissionStr = "查看" %} {% endif %}
+                    {% if device["CanControl"] %} {% set PermissionStr = "控制" %} {% endif %}
+                    {% if device["CanManage"] %} {% set PermissionStr = "管理" %} {% endif %}
                     您的权限: {{PermissionStr}}
                 </p>
                 <p>
@@ -64,17 +64,17 @@
                     {% if device["CanManage"] %}
                     <button type="button" class="btn btn-primary"
                         onclick="redirect('device_detail', 'DeviceID={{DeviceID}}')">
-                        Manage
+                        管理
                     </button>
                     {% elif device["CanControl"] %}
                     <button type="button" class="btn btn-info"
                         onclick="redirect('device_detail', 'DeviceID={{DeviceID}}')">
-                        Detail
+                        控制
                     </button>
                     {% elif device["CanView"] %}
                     <button type="button" class="btn btn-secondary"
                         onclick="redirect('device_detail', 'DeviceID={{DeviceID}}')">
-                        View
+                        查看
                     </button>
                     {% endif %}
                 </p>

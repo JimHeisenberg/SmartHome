@@ -66,9 +66,9 @@
     </li>
     <li class="list-item">
         {% set PermissionStr = None %}
-        {% if device["CanView"] %} {% set PermissionStr = "View" %} {% endif %}
-        {% if device["CanControl"] %} {% set PermissionStr = "Control" %} {% endif %}
-        {% if device["CanManage"] %} {% set PermissionStr = "Manage (full control)" %} {% endif %}
+        {% if device["CanView"] %} {% set PermissionStr = "查看" %} {% endif %}
+        {% if device["CanControl"] %} {% set PermissionStr = "控制" %} {% endif %}
+        {% if device["CanManage"] %} {% set PermissionStr = "管理" %} {% endif %}
         您的权限: {{PermissionStr}}
     </li>
     {% if not edit %}
@@ -127,9 +127,9 @@
     {% for i in range(len_permissions) %}
     {% set permission = permissions[i] %}
     {% set PermissionStr = None %}
-    {% if permission["CanView"] %} {% set PermissionStr = "View" %} {% endif %}
-    {% if permission["CanControl"] %} {% set PermissionStr = "Control" %} {% endif %}
-    {% if permission["CanManage"] %} {% set PermissionStr = "Manage (full control)" %} {% endif %}
+    {% if permission["CanView"] %} {% set PermissionStr = "查看" %} {% endif %}
+    {% if permission["CanControl"] %} {% set PermissionStr = "控制" %} {% endif %}
+    {% if permission["CanManage"] %} {% set PermissionStr = "管理" %} {% endif %}
     {% if not edit %}
     <li class="list-item">
         {{permission["UserName"]}}(ID:{{permission["UserID"]}}): {{PermissionStr}}
@@ -141,25 +141,25 @@
         {{permission["UserName"]}}(ID:{{permission["UserID"]}}):
         <select id="listPVAL-{{i}}">
             {% if permission["CanManage"] %}
-            <option value="CanManage" selected>Can Manage</option>
-            <option value="CanControl">Can Control</option>
-            <option value="CanView">Can View</option>
-            <option value="None">NO Permission</option>
+            <option value="CanManage" selected>管理</option>
+            <option value="CanControl">控制</option>
+            <option value="CanView">查看</option>
+            <option value="None">无权限</option>
             {% elif permission["CanControl"] %}
-            <option value="CanManage">Can Manage</option>
-            <option value="CanControl" selected>Can Control</option>
-            <option value="CanView">Can View</option>
-            <option value="None">NO Permission</option>
+            <option value="CanManage">管理</option>
+            <option value="CanControl" selected>控制</option>
+            <option value="CanView">查看</option>
+            <option value="None">无权限</option>
             {% elif permission["CanView"] %}
-            <option value="CanManage">Can Manage</option>
-            <option value="CanControl">Can Control</option>
-            <option value="CanView" selected>Can View</option>
-            <option value="None">NO Permission</option>
+            <option value="CanManage">管理</option>
+            <option value="CanControl">控制</option>
+            <option value="CanView" selected>查看</option>
+            <option value="None">无权限</option>
             {% else %}
-            <option value="CanManage">Can Manage</option>
-            <option value="CanControl">Can Control</option>
-            <option value="CanView">Can View</option>
-            <option value="None" selected>NO Permission</option>
+            <option value="CanManage">管理</option>
+            <option value="CanControl">控制</option>
+            <option value="CanView">查看</option>
+            <option value="None" selected>无权限</option>
             {% endif %}
         </select>
     </li>

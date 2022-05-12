@@ -43,9 +43,9 @@
                 </p>
                 <p>
                     {% set PermissionStr = None %}
-                    {% if instruction["CanView"] %} {% set PermissionStr = "View" %} {% endif %}
-                    {% if instruction["CanControl"] %} {% set PermissionStr = "Control" %} {% endif %}
-                    {% if instruction["CanManage"] %} {% set PermissionStr = "Manage (full control)" %} {% endif %}
+                    {% if instruction["CanView"] %} {% set PermissionStr = "查看" %} {% endif %}
+                    {% if instruction["CanControl"] %} {% set PermissionStr = "控制" %} {% endif %}
+                    {% if instruction["CanManage"] %} {% set PermissionStr = "管理" %} {% endif %}
                     您的权限: {{PermissionStr}}
                 </p>
                 <p>
@@ -53,17 +53,17 @@
                     {% if instruction["CanManage"] %}
                     <button type="button" class="btn btn-primary"
                         onclick="redirect('instruction_detail', 'InstructionID={{InstructionID}}')">
-                        Manage
+                        管理
                     </button>
                     {% elif instruction["CanControl"] %}
                     <button type="button" class="btn btn-info"
                         onclick="redirect('instruction_detail', 'InstructionID={{InstructionID}}')">
-                        Detail
+                        控制
                     </button>
                     {% elif instruction["CanView"] %}
                     <button type="button" class="btn btn-secondary"
                         onclick="redirect('instruction_detail', 'InstructionID={{InstructionID}}')">
-                        View
+                        查看
                     </button>
                     {% endif %}
                 </p>
