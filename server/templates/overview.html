@@ -29,16 +29,16 @@
                             </p>
                             <p>描述: {{device["DeviceDescription"]}}</p>
                             <p>
-                                状态: Device is
+                                状态: 设备
                                 {% if device["DeviceIsOnline"] %}
-                                <strong style="color: green;">Online</strong> and turned
+                                <strong style="color: green;">Online</strong> 且 
                                 {% if device["DeviceIsOn"] %}
                                 <strong style="color: green;">On</strong>
                                 {% else %}
                                 <strong style="color: red;">Off</strong>
                                 {% endif %}
                                 {% else %}
-                                <strong style="color: red;">Offline</strong> and used to be
+                                <strong style="color: red;">Offline</strong> 且之前 
                                 {% if device["DeviceIsOn"] %}
                                 <strong style="color: green;">On</strong>
                                 {% else %}
@@ -72,7 +72,7 @@
                             </p>
                             <p>描述: {{instruction["InstructionDescription"]}}</p>
                             <p>
-                                状态: Instruction is
+                                状态: 指令
                                 {% if instruction["InstructionIsOn"] %}
                                 <strong style="color: green;">On(Active)</strong>
                                 {% else %}

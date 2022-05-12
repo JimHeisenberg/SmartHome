@@ -257,7 +257,7 @@ def addShowInstructionMeta():
                     </select>
                 """
                 list_group_item_2 = f"""DeviceID: <input value={condition.get('DeviceID')}>"""
-                list_group_item_3 = f"""Device is : 
+                list_group_item_3 = f"""设备 : 
                                         <select>
                                             <option style="color: green;" {"selected" if condition.get('DeviceIsOn') else ""}>On</option>
                                             <option style="color: red;" {"selected" if not condition.get('DeviceIsOn') else ""}>Off</option>
@@ -296,7 +296,7 @@ def addShowInstructionMeta():
                     </select>
                 """
                 list_group_item_2 = "DeviceID: <input>"
-                list_group_item_3 = """Device is : 
+                list_group_item_3 = """设备 : 
                                         <select>
                                             <option style="color: green;">On</option>
                                             <option style="color: red;" selected>Off</option>
@@ -313,7 +313,7 @@ def addShowInstructionMeta():
             elif conditionType == "if":
                 list_group_item_1 = conditionType.upper()
                 list_group_item_2 = f"DeviceID: {condition.get('DeviceID')}"
-                list_group_item_3 = f"Device is : {'On' if condition.get('DeviceIsOn') else 'Off'}"
+                list_group_item_3 = f"设备 : {'On' if condition.get('DeviceIsOn') else 'Off'}"
             elif conditionType == "when":
                 list_group_item_1 = conditionType.upper()
                 list_group_item_2 = f"time {condition.get('timeOperator')} {condition.get('time')}"

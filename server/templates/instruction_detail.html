@@ -80,7 +80,7 @@
     </li>
     {% if not edit %}
     <li>
-        状态: Instruction is
+        状态: 指令
         {% if instruction["InstructionIsOn"] %}
         <strong style="color: green;">On(Active)</strong>
         {% else %}
@@ -258,7 +258,7 @@
         if (element.value == 'if') {
             DeviceID = createInputElement("DeviceID: ")
             list_group.appendChild(DeviceID)
-            DeviceIsOn = createSelectElement("Device is: ", ["On", "Off"])
+            DeviceIsOn = createSelectElement("设备: ", ["On", "Off"])
             list_group.appendChild(DeviceIsOn)
         } else if (element.value == 'when') {
             time = createSelectElement("time ", ["=", "<", ">"])
@@ -273,7 +273,7 @@
             conditionA.setAttribute("class", "list-group")
             conditionA.appendChild(createSelectElement("", ["if", "when", "and", "or"]))
             conditionA.appendChild(createInputElement("DeviceID: "))
-            conditionA.appendChild(createSelectElement("Device is: ", ["On", "Off"]))
+            conditionA.appendChild(createSelectElement("设备: ", ["On", "Off"]))
             out_conditionA = document.createElement("li")
             out_conditionA.setAttribute("class", "list-group-item")
             out_conditionA.appendChild(conditionA)
@@ -283,7 +283,7 @@
             conditionB.setAttribute("class", "list-group")
             conditionB.appendChild(createSelectElement("", ["if", "when", "and", "or"]))
             conditionB.appendChild(createInputElement("DeviceID: "))
-            conditionB.appendChild(createSelectElement("Device is: ", ["On", "Off"]))
+            conditionB.appendChild(createSelectElement("设备: ", ["On", "Off"]))
             out_conditionB = document.createElement("li")
             out_conditionB.setAttribute("class", "list-group-item")
             out_conditionB.appendChild(conditionB)
