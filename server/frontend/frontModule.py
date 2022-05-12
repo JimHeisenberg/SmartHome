@@ -363,9 +363,9 @@ def addShowInstructionMeta():
         idInfo = 'id="InstructionMeta"' if edit else ""
         return f"""
             <ul class="list-group" {idInfo}>
-            <li class="list-group-item">condition:</li>
+            <li class="list-group-item">条件:</li>
             <li class="list-group-item">{showCondition(condition, edit)}</li>
-            <li class="list-group-item">action:</li>
+            <li class="list-group-item">行为:</li>
             <li class="list-group-item">{showAction(action, edit)}</li>
             </ul>
         """
