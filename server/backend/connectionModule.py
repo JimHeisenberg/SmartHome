@@ -15,7 +15,7 @@ import backend.sqlModule as sqlModule
 # global variable
 HOST = "127.0.0.1"
 if "GCC" in sys.version:
-    HOST = "10.0.16.17"
+    HOST = "127.0.0.1"
 CONNECTION_PORT = 54321
 BACKEND_PORT = 12345
 FRONTEND_PORT = 12345

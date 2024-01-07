@@ -14,7 +14,7 @@ from itsdangerous import BadData, TimedJSONWebSignatureSerializer as Serializer
 # global variable
 HOST = "127.0.0.1"
 if "GCC" in sys.version:
-    HOST = "10.0.16.17"
+    HOST = "127.0.0.1"
 BACKEND_IP = HOST
 BACKEND_PORT = 54321
 BACKEND_URL = "http://"+BACKEND_IP+":12345"
